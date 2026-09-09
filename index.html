@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NE-SAFE | Northeast Disaster Intelligence</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #07131f;
+      --panel: #0d2030;
+      --panel2: #10293b;
+      --text: #eaf6ff;
+      --muted: #9eb5c7;
+      --accent: #39d98a;
+      --blue: #43b8ff;
+      --yellow: #ffd166;
+      --orange: #ff9f43;
+      --red: #ff5c6c;
+      --border: #1c3a50;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: linear-gradient(135deg, #06111b, #091c2b 55%, #07131f);
+      color: var(--text);
+      line-height: 1.5
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer;
+      border: 0
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 19, 31, .9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .5px
+    }
+
+    .logo span {
+      color: var(--accent)
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 22px;
+      font-size: 14px
+    }
+
+    .nav a:hover {
+      color: white
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: auto;
+      padding: 76px 22px 55px;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 35px;
+      align-items: center
+    }
+
+    .badge {
+      display: inline-block;
+      background: #123f35;
+      color: #70efb0;
+      border: 1px solid #1c7558;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 18px
+    }
+
+    h1 {
+      font-size: clamp(40px, 6vw, 70px);
+      line-height: 1.02;
+      margin-bottom: 18px
+    }
+
+    h1 span {
+      color: var(--accent)
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 720px
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 800
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #052017
+    }
+
+    .secondary {
+      background: #112b3e;
+      color: white;
+      border: 1px solid var(--border)
+    }
+
+    .hero-card {
+      background: linear-gradient(145deg, #102c40, #0a1c2a);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .25)
+    }
+
+    .risk-ring {
+      height: 190px;
+      width: 190px;
+      border-radius: 50%;
+      margin: 10px auto 18px;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--orange) 0 78%, #19384c 78%);
+      position: relative
+    }
+
+    .risk-ring:after {
+      content: "";
+      position: absolute;
+      width: 142px;
+      height: 142px;
+      background: #0b1d2c;
+      border-radius: 50%
+    }
+
+    .risk-num {
+      position: relative;
+      z-index: 2;
+      text-align: center
+    }
+
+    .risk-num b {
+      font-size: 42px;
+      display: block
+    }
+
+    .risk-num small {
+      color: var(--muted)
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px
+    }
+
+    .mini {
+      background: #0b1d2b;
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 12px
+    }
+
+    .mini small {
+      color: var(--muted)
+    }
+
+    .mini strong {
+      display: block;
+      font-size: 18px;
+      margin-top: 3px
+    }
+
+    section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 55px 22px
+    }
+
+    .section-title {
+      margin-bottom: 22px
+    }
+
+    .section-title h2 {
+      font-size: 34px
+    }
+
+    .section-title p {
+      color: var(--muted)
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 16px
+    }
+
+    .icon {
+      font-size: 28px;
+      margin-bottom: 10px
+    }
+
+    .card h3 {
+      margin-bottom: 7px
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 16px
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px
+    }
+
+    .map {
+      height: 440px;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(25deg, transparent 48%, #1a5a4b 49%, #1a5a4b 51%, transparent 52%),
+        linear-gradient(155deg, transparent 46%, #17455a 47%, #17455a 49%, transparent 50%),
+        radial-gradient(circle at 52% 42%, #254f50 0 8%, transparent 9%),
+        linear-gradient(120deg, #123a3c, #102b3d 40%, #183746);
+    }
+
+    .map:before {
+      content: "NORTHEAST INDIA • LIVE RISK MAP";
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #07131fdd;
+      padding: 8px 11px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .5px
+    }
+
+    .marker {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 7px rgba(255, 92, 108, .18);
+      background: var(--red)
+    }
+
+    .marker.m2 {
+      background: var(--orange);
+      left: 62%;
+      top: 33%;
+      box-shadow: 0 0 0 7px rgba(255, 159, 67, .18)
+    }
+
+    .marker.m3 {
+      background: var(--yellow);
+      left: 37%;
+      top: 64%;
+      box-shadow: 0 0 0 7px rgba(255, 209, 102, .18)
+    }
+
+    .marker.m4 {
+      background: var(--accent);
+      left: 73%;
+      top: 70%;
+      box-shadow: 0 0 0 7px rgba(57, 217, 138, .18)
+    }
+
+    .marker.m1 {
+      left: 49%;
+      top: 49%
+    }
+
+    .map-label {
+      position: absolute;
+      background: #06131edb;
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-size: 11px
+    }
+
+    .l1 {
+      left: 51%;
+      top: 52%
+    }
+
+    .l2 {
+      left: 64%;
+      top: 28%
+    }
+
+    .l3 {
+      left: 30%;
+      top: 68%
+    }
+
+    .l4 {
+      left: 75%;
+      top: 74%
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px
+    }
+
+    .stat {
+      background: #0a1b29;
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 12px
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px
+    }
+
+    .stat b {
+      display: block;
+      font-size: 25px;
+      margin-top: 3px
+    }
+
+    .alert {
+      border-left: 4px solid var(--red);
+      background: #291923;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 12px
+    }
+
+    .alert.orange {
+      border-color: var(--orange);
+      background: #2b2218
+    }
+
+    .alert.green {
+      border-color: var(--accent);
+      background: #12271f
+    }
+
+    .alert strong {
+      display: block
+    }
+
+    .alert small {
+      color: var(--muted)
+    }
+
+    .progress {
+      height: 8px;
+      background: #173044;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .field.full {
+      grid-column: 1/-1
+    }
+
+    .field label {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    input,
+    select,
+    textarea {
+      background: #091a28;
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 11px;
+      outline: none
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical
+    }
+
+    .result {
+      display: none;
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #102f25;
+      border: 1px solid #236a50;
+      color: #b9f6d5
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px
+    }
+
+    .step {
+      padding: 17px 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center
+    }
+
+    .step b {
+      display: block;
+      color: var(--accent);
+      font-size: 12px;
+      margin-bottom: 5px
+    }
+
+    .step span {
+      font-size: 13px
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #102f25;
+      border: 1px solid #2a8060;
+      color: #d5ffe9;
+      padding: 14px 18px;
+      border-radius: 10px;
+      display: none;
+      z-index: 100
+    }
+
+    @media(max-width:900px) {
+
+      .hero,
+      .dashboard {
+        grid-template-columns: 1fr
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .workflow {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .nav a {
+        display: none
+      }
+    }
+
+    @media(max-width:560px) {
+
+      .cards,
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+
+      .mini-grid {
+        grid-template-columns: 1fr
+      }
+
+      .hero {
+        padding-top: 45px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="logo">NE-<span>SAFE</span></div>
+      <div>
+        <a href="#dashboard">Dashboard</a><a href="#report">Report</a><a href="#response">Response</a><a
+          href="#about">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="badge">AI • GIS • EARLY WARNING • RESPONSE</div>
+      <h1>Smarter disaster response for <span>Northeast India.</span></h1>
+      <p>NE-SAFE combines weather, river, terrain, satellite and citizen-generated information to assess flood and
+        landslide risk, issue hyperlocal warnings and support safer evacuation and resource allocation.</p>
+      <div class="actions">
+        <a class="btn primary" href="#dashboard">Open Live Dashboard</a>
+        <a class="btn secondary" href="#report">Report Emergency</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div style="color:var(--muted);font-size:13px">DEMO LOCATION • ASSAM</div>
+      <div class="risk-ring">
+        <div class="risk-num"><b>78%</b><small>Flood Risk</small></div>
+      </div>
+      <div class="mini-grid">
+        <div class="mini"><small>Rainfall</small><strong>82 mm</strong></div>
+        <div class="mini"><small>River Level</small><strong>+1.8 m</strong></div>
+        <div class="mini"><small>Alerts</small><strong>12</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="dashboard">
+    <div class="section-title">
+      <h2>Live Disaster Intelligence</h2>
+      <p>Interactive prototype dashboard for authorities and response teams.</p>
+    </div>
+    <div class="dashboard">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <strong>Risk Map</strong>
+          <select id="riskFilter" onchange="changeRisk()">
+            <option>All hazards</option>
+            <option>Flood</option>
+            <option>Landslide</option>
+          </select>
+        </div>
+        <div class="map">
+          <div class="marker m1"></div>
+          <div class="map-label l1">Guwahati • Critical</div>
+          <div class="marker m2"></div>
+          <div class="map-label l2">Dibrugarh • High</div>
+          <div class="marker m3"></div>
+          <div class="map-label l3">Shillong • Moderate</div>
+          <div class="marker m4"></div>
+          <div class="map-label l4">Imphal • Safe</div>
+        </div>
+      </div>
+      <div class="panel">
+        <strong>Situation Overview</strong>
+        <div class="stats">
+          <div class="stat"><span>High-risk zones</span><b id="zones">18</b></div>
+          <div class="stat"><span>Active reports</span><b>47</b></div>
+          <div class="stat"><span>Shelters available</span><b>21</b></div>
+          <div class="stat"><span>Rescue teams</span><b>8</b></div>
+        </div>
+        <div style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between"><span>Flood confidence</span><b>82%</b></div>
+          <div class="progress"><i style="width:82%"></i></div>
+          <div style="display:flex;justify-content:space-between;margin-top:14px"><span>Landslide
+              confidence</span><b>76%</b></div>
+          <div class="progress"><i style="width:76%"></i></div>
+        </div>
+        <div style="margin-top:20px">
+          <div class="alert"><strong>🔴 Critical: Guwahati</strong><small>River level rising rapidly. Low-lying areas
+              should prepare for evacuation.</small></div>
+          <div class="alert orange"><strong>🟠 High: Dibrugarh</strong><small>Heavy rainfall forecast. Monitor roads and
+              river crossings.</small></div>
+          <div class="alert green"><strong>🟢 Safe: Imphal</strong><small>No immediate high-risk signal in this demo
+              scenario.</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>One platform. Four critical jobs.</h2>
+      <p>The concept follows the complete disaster-management cycle.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>Risk Assessment</h3>
+        <p>Estimate flood and landslide risk from rainfall, river levels, terrain and historical information.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📢</div>
+        <h3>Early Warning</h3>
+        <p>Convert rising risk into clear, location-specific alerts for communities and authorities.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📸</div>
+        <h3>AI Verification</h3>
+        <p>Combine citizen text, images and location signals to increase confidence in emergency reports.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🚑</div>
+        <h3>Smart Response</h3>
+        <p>Support evacuation routing, shelter selection and rescue-resource prioritization.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="report">
+    <div class="section-title">
+      <h2>Report an Emergency</h2>
+      <p>Prototype citizen reporting interface. In production, reports would be geotagged and synced even after
+        connectivity returns.</p>
+    </div>
+    <div class="panel">
+      <form id="reportForm">
+        <div class="form-grid">
+          <div class="field"><label>Incident type</label><select id="type">
+              <option>Flooded road</option>
+              <option>Landslide</option>
+              <option>Damaged bridge</option>
+              <option>Waterlogging</option>
+              <option>Other</option>
+            </select></div>
+          <div class="field"><label>People affected</label><input id="people" type="number" min="1"
+              placeholder="e.g. 25" required></div>
+          <div class="field"><label>Location</label><input id="location" placeholder="Village / district" required>
+          </div>
+          <div class="field"><label>Road blocked?</label><select id="blocked">
+              <option>Yes</option>
+              <option>No</option>
+              <option>Unknown</option>
+            </select></div>
+          <div class="field full"><label>Description</label><textarea id="desc"
+              placeholder="Describe what happened..."></textarea></div>
+          <div class="field full"><button class="btn primary" type="submit">Submit Emergency Report</button></div>
+        </div>
+      </form>
+      <div id="result" class="result"></div>
+    </div>
+  </section>
+
+  <section id="response">
+    <div class="section-title">
+      <h2>Response Command Center</h2>
+      <p>Example of how an authority can prioritize assistance.</p>
+    </div>
+    <div class="dashboard">
+      <div class="panel">
+        <strong>Priority Queue</strong>
+        <div class="alert" style="margin-top:15px"><strong>Priority 1 • Village A</strong><small>184 affected • Critical
+            risk • 2.1 km from Team 03 • Route available</small></div>
+        <div class="alert orange"><strong>Priority 2 • Village C</strong><small>96 affected • High risk • Road partially
+            blocked • Shelter B available</small></div>
+        <div class="alert green"><strong>Priority 3 • Village B</strong><small>42 affected • Moderate risk • 4.8 km from
+            nearest team</small></div>
+      </div>
+      <div class="panel">
+        <strong>Resource Status</strong>
+        <div class="stats">
+          <div class="stat"><span> Ambulances</span><b>12</b></div>
+          <div class="stat"><span> Rescue teams</span><b>8</b></div>
+          <div class="stat"><span> Boats</span><b>5</b></div>
+          <div class="stat"><span> Shelters</span><b>21</b></div>
+        </div>
+        <button class="btn primary" style="margin-top:16px;width:100%" onclick="allocate()">Recommend Resource
+          Allocation</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-title">
+      <h2>How NE-SAFE works</h2>
+      <p>DATA → PREDICTION → WARNING → VERIFICATION → EVACUATION → RESCUE</p>
+    </div>
+    <div class="workflow">
+      <div class="step"><b>01</b><span>Weather + River</span></div>
+      <div class="step"><b>02</b><span>Terrain + Satellite</span></div>
+      <div class="step"><b>03</b><span>AI Risk Engine</span></div>
+      <div class="step"><b>04</b><span>Hyperlocal Alert</span></div>
+      <div class="step"><b>05</b><span>Safe Route</span></div>
+      <div class="step"><b>06</b><span>Rescue Allocation</span></div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <strong>Note</strong>
+      <p style="color:var(--muted);margin-top:8px">The risk percentages and
+        map markers are simulated UI values; a production system should connect them to validated datasets, ML models,
+        GIS services, official alerts and emergency-response infrastructure.</p>
+    </div>
+  </section>
+
+  <footer>NE-SAFE • AI-powered disaster intelligence platform</footer>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function toast(msg) {
+      const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2800);
+    }
+    function changeRisk() {
+      const v = document.getElementById('riskFilter').value;
+      const zones = document.getElementById('zones');
+      zones.textContent = v === 'Flood' ? '12' : v === 'Landslide' ? '9' : '18';
+      toast(v + ' layer selected on the prototype map.');
+    }
+    document.getElementById('reportForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const type = document.getElementById('type').value;
+      const people = document.getElementById('people').value;
+      const loc = document.getElementById('location').value;
+      const blocked = document.getElementById('blocked').value;
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `<strong>✓ Report received for ${loc}</strong><br>
+  ${type} • ${people} people affected • Road blocked: ${blocked}<br>
+  <small>Prototype AI triage: report queued for location verification and authority review.</small>`;
+      toast('Emergency report submitted.');
+      e.target.reset();
+    });
+    function allocate() {toast('Recommendation: dispatch Team 03 to Village A and reserve Boat 02 for Village C.');}
+  </script>
+</body>
+
+</html>
